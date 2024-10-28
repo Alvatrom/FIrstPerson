@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 35428998}
   - component: {fileID: 35428997}
   - component: {fileID: 35428996}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: suelo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -757,6 +757,37 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!1 &1665049906
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1665049907}
+  m_Layer: 0
+  m_Name: Pies
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1665049907
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1665049906}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.994, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1943803074}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1665081827
 GameObject:
   m_ObjectHideFlags: 3
@@ -965,6 +996,7 @@ Transform:
   - {fileID: 518821814}
   - {fileID: 415020965}
   - {fileID: 630973212}
+  - {fileID: 1665049907}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &1943803075
@@ -1033,6 +1065,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   velocidadMovimiento: 5
+  factorGravedad: -9.81
+  radioDeteccion: 0
+  pies: {fileID: 1665049907}
+  queEsSuelo:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

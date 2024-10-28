@@ -8,6 +8,7 @@ public class ThirdPerson : MonoBehaviour
     [SerializeField] private float smoothTime;
 
     CharacterController controller;
+    private Animator animaciones;
 
     private float velocidadRotacion;
 
@@ -15,6 +16,7 @@ public class ThirdPerson : MonoBehaviour
     void Start()
     {
         controller = GetComponent<CharacterController>();
+        animaciones = GetComponent<Animator>();
 
     }
 
@@ -33,8 +35,9 @@ public class ThirdPerson : MonoBehaviour
 
 
         //si el jugador ha tocado teclas...
-        if (input.sqrMagnitude > 0)
+        if (input.sqrMagnitude > 0)// de esta manera es mas optimo
         {
+            animaciones.SetBool("walking", true);
             //calculo el angulo al que tengo que rotarme en funcion de los inputs y camara
             float angulo = Mathf.Atan2(input.x, input.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
 
@@ -47,6 +50,11 @@ public class ThirdPerson : MonoBehaviour
             Vector3 movimiento = Quaternion.Euler(0, angulo, 0) * Vector3.forward;
 
             controller.Move(movimiento * velocidadMovimiento * Time.deltaTime);
+        }
+        else
+        {
+            animaciones.SetBool("walking", false);
+
         }
     }
 }

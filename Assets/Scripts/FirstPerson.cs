@@ -4,9 +4,20 @@ using UnityEngine;
 
 public class FirstPerson : MonoBehaviour
 {
+    [Header("Movimiento")]
     [SerializeField] private float velocidadMovimiento;
+    [SerializeField] private float factorGravedad;
+
+
+
+    [Header("Detector Suelo")]
+    [SerializeField] private float radioDeteccion;
+    [SerializeField] private Transform pies;
+    [SerializeField] private LayerMask queEsSuelo;
 
     CharacterController controller;
+
+    private Vector3 movimientoVertical;
 
     // Start is called before the first frame update
     void Start()
@@ -19,6 +30,8 @@ public class FirstPerson : MonoBehaviour
     void Update()
     {
         MoverYRotar();
+        AplicarGravedad();
+        DetectorSuelo();
     }
 
     private void MoverYRotar()
@@ -42,5 +55,19 @@ public class FirstPerson : MonoBehaviour
 
             controller.Move(input * velocidadMovimiento * Time.deltaTime);
         }
+    }
+    private void AplicarGravedad()
+    {
+        //Mi velocidadVertical va en aumento a cierto factor por segundo.
+        movimientoVertical.y += factorGravedad * Time.deltaTime;
+        controller.Move(movimientoVertical* Time.deltaTime);
+        // se multiplica dos veces porque la gravedad es m/s^2, en unity ponemos la gravedad en negativo porque aqui el calculo esta en positivo
+    }
+
+    private bool DetectorSuelo()
+    {
+        //tirar una esfera de deteccion en los pies con cierto radio
+        bool resultado= Physics.CheckSphere(pies.position, radioDeteccion, queEsSuelo);
+        return resultado;
     }
 }
