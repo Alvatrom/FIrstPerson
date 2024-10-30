@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,7 @@ public class FirstPerson : MonoBehaviour
     [Header("Movimiento")]
     [SerializeField] private float velocidadMovimiento;
     [SerializeField] private float factorGravedad;
+    [SerializeField] private float alturaSalto;
 
 
 
@@ -23,6 +25,9 @@ public class FirstPerson : MonoBehaviour
     void Start()
     {
         controller = GetComponent<CharacterController>();
+
+        //bloquea el raton en el centro de la pantalla y lo oculta
+        Cursor.lockState = CursorLockMode.Locked;
         
     }
 
@@ -30,30 +35,46 @@ public class FirstPerson : MonoBehaviour
     void Update()
     {
         MoverYRotar();
+
         AplicarGravedad();
-        DetectorSuelo();
+
+        if(DetectorSuelo() == true)
+        {
+            //Cada vez que aterricemos reiniciamos el calculo de gravedad
+            movimientoVertical.y = 0;
+            Saltar();
+
+        }
+    }
+
+    private void Saltar()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            //Aplico "formula" de salto
+            movimientoVertical.y = Mathf.Sqrt(-2 * factorGravedad * alturaSalto);
+        }
     }
 
     private void MoverYRotar()
     {
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
-
         Vector2 input = new Vector2(h, v).normalized;
 
         //calculo el angulo al que tengo que rotarme en funcion de los inputs y camara
-        float angulo = Mathf.Atan2(input.x, input.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
 
-        //el cuerpo quede orientado hacia donde me muevo(camara)
-        transform.eulerAngles = new Vector3(0, angulo, 0);
+
+        //Roto el cuerpo de forma constante con la rotacion "y" de la camara
+        transform.rotation = Quaternion.Euler(0, Camera.main.transform.eulerAngles.y, 0);
 
         //si el jugador ha tocado teclas...
         if (input.magnitude > 0)
         {
+             float angulo = Mathf.Atan2(input.x, input.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
             //Mi movimiento tambien ha quedado rotado en base al angulo calculado
             Vector3 movimiento = Quaternion.Euler(0, angulo, 0) * Vector3.forward;
-
-            controller.Move(input * velocidadMovimiento * Time.deltaTime);
+            controller.Move(movimiento * velocidadMovimiento * Time.deltaTime);
         }
     }
     private void AplicarGravedad()
@@ -69,5 +90,11 @@ public class FirstPerson : MonoBehaviour
         //tirar una esfera de deteccion en los pies con cierto radio
         bool resultado= Physics.CheckSphere(pies.position, radioDeteccion, queEsSuelo);
         return resultado;
+    }
+    // metodo que se ejecuta automaticamente para dibujar cualquier figura
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(pies.position, radioDeteccion);
     }
 }
