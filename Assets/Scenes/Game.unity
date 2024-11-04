@@ -621,7 +621,7 @@ GameObject:
   - component: {fileID: 415020965}
   - component: {fileID: 415020968}
   - component: {fileID: 415020967}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: visor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -890,7 +890,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 630973212}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Ojos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1282,7 +1282,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1665049907}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Pies
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1517,9 +1517,9 @@ GameObject:
   - component: {fileID: 1943803072}
   - component: {fileID: 1943803076}
   - component: {fileID: 1943803075}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1657,6 +1657,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57c31944f735db34ab9f6db5e56cb7e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  vidas: 100
   velocidadMovimiento: 5
   factorGravedad: -9.81
   alturaSalto: 3
