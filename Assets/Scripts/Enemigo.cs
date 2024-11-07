@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -7,7 +8,8 @@ public class Enemigo : MonoBehaviour
 {
     [Header ("Sistema de ataque")]
     [SerializeField] private Transform attackPoint;
-    [SerializeField] private float danhoEnemigo;
+    [SerializeField] private float danhoEnemigo,danhoRecibido;
+    [SerializeField] private float vida;
     [SerializeField] private float radioAtaque;
     [SerializeField] private LayerMask queEsDanhable;
 
@@ -19,14 +21,24 @@ public class Enemigo : MonoBehaviour
     [SerializeField] private FirstPerson player;
     private bool ventanaAbierta;
     private bool puedoDanhar =true;
+
+    Rigidbody[] huesos;
     int correrAnim;
     //el enemigo tiene que perseguir al player
     // Start is called before the first frame update
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        player = FirstPerson.FindObjectOfType<FirstPerson>();
         animator = GetComponent<Animator>();
+        player = FirstPerson.FindObjectOfType<FirstPerson>();
+        huesos = GetComponentsInChildren<Rigidbody>();
+
+        for (int i = 0;i < huesos.Length; i++)
+        {
+            huesos[i].isKinematic = true;
+        }
+
+
 
         correrAnim = Random.Range(0,2);
         if (correrAnim == 0)
@@ -79,12 +91,27 @@ public class Enemigo : MonoBehaviour
         }
     }
 
-  
+    public void RecibirDanho(float danhoRecibido)
+    {
+        vida -= danhoRecibido;
+        if (vida < 0)
+        {
+            Destroy(this.gameObject);
+        }
+    }
     private void FinAtaque()
     {
         agent.isStopped = false;//me paro
         animator.SetBool("attacking", false);//lanzo el ataque
         puedoDanhar = true; 
+    }
+
+    private void CambiarEstadoHuesos(bool estado)
+    {
+        for(int i = 0;i < huesos.Length; i++)
+        {
+            huesos[i].isKinematic = estado;
+        }
     }
     private void AbrirVentanaAtaque()
     {
@@ -94,7 +121,6 @@ public class Enemigo : MonoBehaviour
     private void CerrarVentanaAtaque()
     {
         ventanaAbierta = false;
-        Debug.Break();
 
     }
 }
