@@ -99,6 +99,15 @@ public class FirstPerson : MonoBehaviour
     {
         vidas -= x;
     }
+    //Sinonimos de OnCollisionEnter PERO para un C.C.
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (hit.gameObject.CompareTag("ParteEnemigo"))
+        {
+            Vector3 vectorPush = hit.gameObject.transform.position - transform.position;
+            hit.gameObject.GetComponent<Rigidbody>().AddForce(vectorPush.normalized * 150, ForceMode.Impulse);
+        }
+    }
 
     // metodo que se ejecuta automaticamente para dibujar cualquier figura
     private void OnDrawGizmos()

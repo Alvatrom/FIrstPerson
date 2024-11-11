@@ -24,6 +24,9 @@ public class Enemigo : MonoBehaviour
 
     Rigidbody[] huesos;
     int correrAnim;
+
+    public float Vida { get => vida; set => vida = value; }
+
     //el enemigo tiene que perseguir al player
     // Start is called before the first frame update
     void Start()
@@ -106,7 +109,7 @@ public class Enemigo : MonoBehaviour
         puedoDanhar = true; 
     }
 
-    private void CambiarEstadoHuesos(bool estado)
+    public void CambiarEstadoHuesos(bool estado)
     {
         for(int i = 0;i < huesos.Length; i++)
         {
@@ -122,5 +125,11 @@ public class Enemigo : MonoBehaviour
     {
         ventanaAbierta = false;
 
+    }
+    public void Morir()
+    {
+        CambiarEstadoHuesos(false);
+        animator.enabled = false;
+        agent.enabled = false;
     }
 }
