@@ -57,7 +57,12 @@ public class Enemigo : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Perseguir();
+        if (agent.enabled)
+        {
+           Perseguir();
+
+        }
+
         if (ventanaAbierta && puedoDanhar)
         {
           DetectarImpacto();
@@ -86,7 +91,7 @@ public class Enemigo : MonoBehaviour
     {
         agent.SetDestination(player.transform.position);
 
-        if (agent.remainingDistance <= agent.stoppingDistance)
+        if (!agent.pathPending == false && agent.remainingDistance <= agent.stoppingDistance)//si no tiene calcuulos pendientes y se cumple la distancia ...
         {
             //lanzar la animacion de ataque
             agent.isStopped = true;//me paro
