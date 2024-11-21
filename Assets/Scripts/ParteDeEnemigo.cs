@@ -14,4 +14,8 @@ public class ParteDeEnemigo : MonoBehaviour
             mainScript.Morir();
         }
     }
+    public void Explotar()
+    {
+
+    }
 }

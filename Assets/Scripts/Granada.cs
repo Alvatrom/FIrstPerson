@@ -5,7 +5,11 @@ using UnityEngine;
 public class Granada : MonoBehaviour
 {
     [SerializeField] private float fuerzaImpulso;
+    [SerializeField] private float radioExplosion;
     [SerializeField] private GameObject explosion;
+    [SerializeField] private LayerMask queEsExplotable;
+
+    private Collider[] buffer = new Collider[100];
     Rigidbody rb;
     // Start is called before the first frame update
     void Start()
@@ -24,5 +28,20 @@ public class Granada : MonoBehaviour
     private void OnDestroy()//se ejecuta automaticamente cuando va a morir
     {
         Instantiate(explosion, transform.position,Quaternion.identity);
+
+        int numeroDetectados = Physics.OverlapSphereNonAlloc(transform.position, radioExplosion, buffer, queEsExplotable);
+        //si el nº de detecciones es superior a 0....
+        if(numeroDetectados > 0)
+        {
+            //recorrer todos los collider detectados....
+            for (int i = 0; i < numeroDetectados; i++)
+            {
+                //por cada collider detectado(huesos), voy a coger el script de cada uno
+                if(buffer[i].TryGetComponent(out ParteDeEnemigo scriptHueso))
+                {
+                    scriptHueso.Explotar();
+                }
+            }
+        }
     }
 }
