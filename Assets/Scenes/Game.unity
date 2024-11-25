@@ -956,7 +956,7 @@ MonoBehaviour:
   - {fileID: 1502995706}
   numeroNiveles: 5
   rondasPorNivel: 5
-  spawnsPorRonda: 0
+  spawnsPorRonda: 7
   esperaEntreSpawns: 2
   esperaEntreRondas: 10
   esperaEntreNiveles: 15
