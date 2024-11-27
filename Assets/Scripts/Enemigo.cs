@@ -96,7 +96,21 @@ public class Enemigo : MonoBehaviour
             //lanzar la animacion de ataque
             agent.isStopped = true;//me paro
             animator.SetBool("attacking", true);//lanzo el ataque
+            EnfocarObjetivo();
         }
+    }
+    private void EnfocarObjetivo()
+    {
+        //1.calculo vector Unitario que mira hacia el jugador desde nuestra posicion
+        Vector3 direccionObjetivo = (player.transform.position - transform.position).normalized;
+
+        //2.Modifico la y del vector para prevenir que el Enemigo se tumbe.
+        direccionObjetivo.y = 0;
+
+        //3.calculo la rotacion para conseguir dicha direccion
+
+        Quaternion rotacionObjetivo = Quaternion.LookRotation(direccionObjetivo);
+        transform.rotation = rotacionObjetivo;
     }
 
     public void RecibirDanho(float danhoRecibido)
