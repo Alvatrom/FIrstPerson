@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class FirstPerson : MonoBehaviour
 {
+    public static FirstPerson singleton;
+
     [SerializeField] private float vidas;
 
 
@@ -23,6 +25,18 @@ public class FirstPerson : MonoBehaviour
     CharacterController controller;
 
     private Vector3 movimientoVertical;
+
+    private void Awake()
+    {
+        if (singleton == null)
+        {
+            singleton = this;// lo del trono, si esta vacio pues me siento yo
+        }
+        else
+        {
+            DestroyImmediate(this.gameObject);
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -95,9 +109,9 @@ public class FirstPerson : MonoBehaviour
         return resultado;
     }
 
-    public void RecibirDanho(float x)
+    public void RecibirDanho(float danhoEnemigo)
     {
-        vidas -= x;
+        vidas -= danhoEnemigo;
     }
     //Sinonimos de OnCollisionEnter PERO para un C.C.
     private void OnControllerColliderHit(ControllerColliderHit hit)

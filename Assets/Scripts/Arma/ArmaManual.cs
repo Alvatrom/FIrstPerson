@@ -19,7 +19,7 @@ public class ArmaManual : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))//el 0 es boton iz, 1 boton dere, 2 boton central
         {
             system.Play();// ejecutar sistema de particulas
             if (Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hitInfo, misDatos.distanciaAtaque))
