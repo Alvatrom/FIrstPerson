@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -8,9 +9,10 @@ using UnityEditor;
 //para que solo funcione en el unity editor
 public class CreatorEnemy : MonoBehaviour
 {
-    //el objetivo que seguira
-    [SerializeField] Transform player;
-    [SerializeField] float velocidad = 5f;
+    protected NavMeshAgent agente;
+
+
+    //[SerializeField] float velocidad = 5f;
     public Estados estado;
     public float distanciaSeguir, distanciaAtacar, distanciaEscapar;
 
@@ -23,6 +25,8 @@ public class CreatorEnemy : MonoBehaviour
 
     public virtual void Awake()
     {
+        agente = GetComponent<NavMeshAgent>();
+        estado = Estados.patrulla;
         StartCoroutine(CalcularDistancia());
     }
 
@@ -30,29 +34,11 @@ public class CreatorEnemy : MonoBehaviour
     {
         if (autoSeleccionarTarget)
         {
-            //para que encuentre el objeto con el tag player // tendian que estar en el awake
-            //target = GameObject.FindGameObjectWithTag("Player").transform; // tendian que estar en el awake
             target = FirstPerson.singleton.transform;
-            //para calcular contunuamente la distancia al jugador, consume // tendian que estar en el awake
-            //player = GameObject.FindGameObjectWithTag("Player").transform; // tendian que estar en el awake
-
         }
     }
 
-    void Update()
-    {
-        // Verifica si hay un objetivo asignado
-        if (player != null)
-        {
-            //vectro dirireccion hacia el jugaddor
-            Vector3 direccion = (player.position - transform.position).normalized;
-            transform.position += direccion * velocidad * Time.deltaTime;
-
-            // Opcional: Gira el enemigo para que mire hacia el objetivo
-            transform.LookAt(player);
-        }
-    }
-    private void LateUpdate()
+    protected virtual void Update()
     {
         CheckEstado();
     }
@@ -70,6 +56,10 @@ public class CreatorEnemy : MonoBehaviour
                 break;
             case Estados.atacar:
                 EstadoAtacar();
+                break;
+            case Estados.alerta:
+                transform.LookAt(target, Vector3.up);
+                EstadoAlerta();
                 break;
             case Estados.muerto:
                 EstadoMuerto();
@@ -91,6 +81,9 @@ public class CreatorEnemy : MonoBehaviour
             case Estados.atacar:
                 EstadoAtacar();
                 break;
+            case Estados.alerta:
+                EstadoAlerta();
+                break;
             case Estados.muerto:
                 vivo = false;
                 EstadoMuerto();
@@ -102,14 +95,14 @@ public class CreatorEnemy : MonoBehaviour
 
     public virtual void EstadoPatrulla()
     {
-        if (distancia < distanciaSeguir)
+        if (!agente.pathPending && distancia < distanciaSeguir)
         {
             CambiarEstado(Estados.seguir);
         }
     }
     public virtual void EstadoSeguir()
     {
-        if (distancia < distanciaAtacar)
+        if (!agente.pathPending && distancia < distanciaAtacar)
         {
             CambiarEstado(Estados.atacar);
         }
@@ -120,25 +113,34 @@ public class CreatorEnemy : MonoBehaviour
     }
     public virtual void EstadoAtacar()
     {
-        if (distancia > distanciaAtacar + 0.4f)
+        if (!agente.pathPending && distancia > distanciaAtacar + 0.4f)
         {
             CambiarEstado(Estados.seguir);
         }
+    }
+    public virtual void EstadoAlerta()
+    {
+        
     }
     public virtual void EstadoMuerto()
     {
 
     }
 
-    IEnumerator CalcularDistancia()// esto quiere decir que es una corutina(puede pausarse y reanudarse despues de un tiempo)
+    IEnumerator CalcularDistancia() // Corutina para calcular la distancia al jugador
     {
-        while (vivo)//para optimizar, si esta muerto nos ahorramos el calculo
+        while (vivo) // Solo calcular mientras el enemigo esté vivo
         {
-            yield return new WaitForSeconds(0.2f);//con esta pausa no se cuelga el unity
-            if (target != null)// necesario para que no ocurran errores
+            if (target != null && target.gameObject.activeInHierarchy) // Verifica si el target es válido y está activo
             {
-                distancia = Vector3.Distance(transform.position, target.position);
+                distancia = Vector3.Distance(transform.position, target.position); // Calcula la distancia
             }
+            else
+            {
+                distancia = Mathf.Infinity; // Si no hay target, establece la distancia como infinita
+            }
+
+            yield return new WaitForSeconds(0.1f); // Calcula la distancia cada 0.1 segundos (ajústalo si es necesario)
         }
     }
     public enum Estados
@@ -146,7 +148,8 @@ public class CreatorEnemy : MonoBehaviour
         patrulla = 0,
         seguir = 1,
         atacar = 2,
-        muerto = 3,
+        alerta = 3,
+        muerto = 4,
     }
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
