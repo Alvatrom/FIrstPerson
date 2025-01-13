@@ -7,8 +7,8 @@ using UnityEngine.AI;
 public class Enemigo : MonoBehaviour
 {
     [Header ("Sistema de ataque")]
-    [SerializeField] private Transform attackPoint;
     [SerializeField] private float danhoEnemigo,danhoRecibido;
+    [SerializeField] private Transform attackPoint;
     [SerializeField] private float vida;
     [SerializeField] private float radioAtaque;
     [SerializeField] private LayerMask queEsDanhable;

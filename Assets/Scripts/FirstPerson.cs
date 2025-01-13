@@ -24,6 +24,7 @@ public class FirstPerson : MonoBehaviour
 
     CharacterController controller;
 
+    //sirve tanto para la gravedad como para los saltos
     private Vector3 movimientoVertical;
 
     private void Awake()
@@ -77,9 +78,8 @@ public class FirstPerson : MonoBehaviour
     {
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
-        Vector2 input = new Vector2(h, v).normalized;
 
-        //calculo el angulo al que tengo que rotarme en funcion de los inputs y camara
+        Vector2 input = new Vector2(h, v).normalized;
 
 
         //Roto el cuerpo de forma constante con la rotacion "y" de la camara
@@ -88,9 +88,14 @@ public class FirstPerson : MonoBehaviour
         //si el jugador ha tocado teclas...
         if (input.magnitude > 0)
         {
+            //calcula el angulo al que tengo que rotarme en funcion de los inputs y camara.
              float angulo = Mathf.Atan2(input.x, input.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
+
+            //float anguloSuave = Mathf.SmoothDampAngle(transform.eulerAngles.y, angulo,ref velocidadRotacion)
+
             //Mi movimiento tambien ha quedado rotado en base al angulo calculado
             Vector3 movimiento = Quaternion.Euler(0, angulo, 0) * Vector3.forward;
+
             controller.Move(movimiento * velocidadMovimiento * Time.deltaTime);
         }
     }

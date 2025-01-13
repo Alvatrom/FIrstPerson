@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.VirtualTexturing;
 
-public class SIstemaDeInteraciones : MonoBehaviour
+public class SistemaDeInteraciones : MonoBehaviour
 {
     private Camera cam;
     private Transform interactuableActual;
