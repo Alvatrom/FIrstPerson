@@ -92,7 +92,7 @@ public class Enemigo : MonoBehaviour
     {
         agent.SetDestination(player.transform.position);
 
-        if (!agent.pathPending == false && agent.remainingDistance <= agent.stoppingDistance)//si no tiene calcuulos pendientes y se cumple la distancia ...
+        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)//si no tiene calcuulos pendientes y se cumple la distancia ...
         {
             //lanzar la animacion de ataque
             agent.isStopped = true;//me paro

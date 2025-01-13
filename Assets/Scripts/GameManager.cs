@@ -84,6 +84,7 @@ public class GameManager : MonoBehaviour
             else
             {
                 Time.timeScale = 0;
+                Cursor.lockState = CursorLockMode.None;
                 menuPausa.SetActive(true);
             }
             menuPausa.SetActive(true);
