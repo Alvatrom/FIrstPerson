@@ -256,17 +256,7 @@ public class EnemigoGrande : CreatorEnemy
         EnfocarObjetivo();
     }
 
-    /*private void DetenerAumentarSusto()
-    {
-        if(aumentarSustoCoroutine== null)
-        {
-            EnfocarObjetivo();
-            StopCoroutine(aumentarSustoCoroutine);
-            aumentarSustoCoroutine = null;
-            asustando= false;
-            Debug.Log("Corutina susto detenida");
-        }
-    }*/
+
 
     public override void EstadoAtacar()
     {
