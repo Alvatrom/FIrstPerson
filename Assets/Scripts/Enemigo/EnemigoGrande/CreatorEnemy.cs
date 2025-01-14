@@ -134,6 +134,15 @@ public class CreatorEnemy : MonoBehaviour
             if (target != null && target.gameObject.activeInHierarchy) // Verifica si el target es válido y está activo
             {
                 distancia = Vector3.Distance(transform.position, target.position); // Calcula la distancia
+                // Verifica si el target tiene el componente FirstPerson
+                if (agente.destination == target.position)
+                {
+                    agente.stoppingDistance = 1.5f; // Distancia menor si el destination del navmesh es el player
+                }
+                else
+                {
+                    agente.stoppingDistance = 0f; // Distancia por defecto
+                }
             }
             else
             {
