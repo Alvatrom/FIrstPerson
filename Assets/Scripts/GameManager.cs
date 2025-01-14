@@ -126,6 +126,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
         vidas = 3;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Cursor.lockState = CursorLockMode.Locked;
         BuscarPlayer();
     }
 
