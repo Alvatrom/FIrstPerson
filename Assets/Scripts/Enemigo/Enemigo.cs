@@ -10,7 +10,7 @@ public class Enemigo : MonoBehaviour
     [SerializeField] private float danhoEnemigo,danhoRecibido;
     [SerializeField] private Transform attackPoint;
     [SerializeField] private float vida;
-    [SerializeField] private float radioAtaque;
+    [SerializeField] private float radioAtaque = 1;
     [SerializeField] private LayerMask queEsDanhable;
 
 
@@ -36,10 +36,8 @@ public class Enemigo : MonoBehaviour
         player = FirstPerson.FindObjectOfType<FirstPerson>();
         huesos = GetComponentsInChildren<Rigidbody>();
 
-        for (int i = 0;i < huesos.Length; i++)
-        {
-            huesos[i].isKinematic = true;
-        }
+        
+        CambiarEstadoHuesos(true);
 
 
 
@@ -73,6 +71,8 @@ public class Enemigo : MonoBehaviour
         //1º referenciar el attackPoint
         //2º crear una variable que represente el radio de ataque
         //3 crear una variable que represente que es dañable,(layer)
+
+
         Collider[] collDetectados = Physics.OverlapSphere(attackPoint.position,radioAtaque, queEsDanhable);
         
         //si hemos detectado algo dentro de nuestro radar
@@ -117,9 +117,9 @@ public class Enemigo : MonoBehaviour
     public void RecibirDanho(float danhoRecibido)
     {
         vida -= danhoRecibido;
-        if (vida < 0)
+        if (vida <= 0)
         {
-            Destroy(this.gameObject);
+            CambiarEstadoHuesos(false);
         }
     }
     private void FinAtaque()
@@ -151,5 +151,6 @@ public class Enemigo : MonoBehaviour
         CambiarEstadoHuesos(false);
         animator.enabled = false;
         agent.enabled = false;
+        Destroy(gameObject, 10);
     }
 }

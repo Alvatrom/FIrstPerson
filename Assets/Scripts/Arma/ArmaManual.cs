@@ -24,11 +24,24 @@ public class ArmaManual : MonoBehaviour
             system.Play();// ejecutar sistema de particulas
             if (Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hitInfo, misDatos.distanciaAtaque))
             {
-                if (hitInfo.transform.CompareTag("Enemigo"))
+                if (hitInfo.transform.CompareTag("ParteEnemigo"))
                 {
                     Debug.Log("Disparo recibido "+ hitInfo.transform.name);
-                    hitInfo.transform.GetComponent<Enemigo>().RecibirDanho(misDatos.distanciaAtaque);
+                    if (hitInfo.transform.GetComponent<ParteDeEnemigo>())
+                    {
+                        hitInfo.transform.GetComponent<ParteDeEnemigo>().RecibirDanho(misDatos.danhoAtaque);
+                    }
+                    //hitInfo.transform.GetComponent<Enemigo>().RecibirDanho(misDatos.danhoAtaque);
+                    if (hitInfo.transform.GetComponent<EnemigoGrande>())
+                    {
+                        hitInfo.transform.GetComponent<ParteEnemigoGrande>().RecibirDanho(misDatos.danhoAtaque);
+                    }
                 }
+                /*if (hitInfo.transform.CompareTag("ParteEnemigo"))
+                {
+                    Debug.Log("Disparo recibido " + hitInfo.transform.name);
+                    hitInfo.transform.GetComponent<EnemigoGrande>().RecibirDanho(misDatos.danhoAtaque);
+                }*/
                 //Debug.Log(hitInfo.transform.name);//muestro el nombre de a quien he impactado
 
             }

@@ -11,21 +11,70 @@ public class EnemigoGrande : CreatorEnemy
     public Animator animaciones;
     public float daño = 3;
 
+    [Header("Sistema de ataque")]
+    [SerializeField] private float danhoEnemigo, danhoRecibido;
+    [SerializeField] private Transform attackPoint;
+    [SerializeField] private float radioAtaque = 1;
+    [SerializeField] private LayerMask queEsDanhable;
+
+
+    [SerializeField] private FirstPerson player;
+    private bool ventanaAbierta;
+    private bool puedoDanhar = true;
+
+    [SerializeField] private float vida;
+    [SerializeField] private bool muerto = false;
+
+
 
     public Transform[] CheckPoints;
     private int indice, indiceSusto = 0;
     public float distanciaCheckPoints;
-    private bool isIdle,asustando = false;
+    private bool isIdle,asustando = false,destruyendo = false;
 
     private Coroutine aumentarSustoCoroutine;
     private EstadoVisto estadoVisto = EstadoVisto.NoVisto;
+
+    Rigidbody[] huesos;
+
+    public float Vida { get => vida; set => vida = value; }
 
 
     public override void Awake()//para poder modificar el del padre,llama lo del padre pero permite modificarlo para este caso 
     {
         base.Awake();
+
+        huesos = GetComponentsInChildren<Rigidbody>();
+        player = FirstPerson.FindObjectOfType<FirstPerson>();
+
+        CambiarEstadoHuesos(true);
         estado = Estados.patrulla;
 
+    }
+    public void FixedUpdate()
+    {
+        if (ventanaAbierta && puedoDanhar)
+        {
+            DetectarImpacto();
+        }
+    }
+
+    public void CambiarEstadoHuesos(bool estado)
+    {
+        for (int i = 0; i < huesos.Length; i++)
+        {
+            huesos[i].isKinematic = estado;
+        }
+    }
+    public void RecibirDanho(float danhoRecibido)
+    {
+        vida -= danhoRecibido;
+        if (vida <= 0)
+        {
+            CambiarEstadoHuesos(false);
+            Matar();
+            //CambiarEstado(Estados.muerto);
+        }
     }
 
     public override void EstadoPatrulla()
@@ -33,6 +82,7 @@ public class EnemigoGrande : CreatorEnemy
         base.EstadoPatrulla();
 
         if (asustando) return;
+        if(muerto) return;
 
         if (isIdle) return;//si esta en idle no continua
 
@@ -144,6 +194,7 @@ public class EnemigoGrande : CreatorEnemy
         EnfocarObjetivo();
         base.EstadoSeguir();
         if (asustando) return;
+        if(muerto) return;
 
         if (animaciones != null)
         {
@@ -293,40 +344,68 @@ public class EnemigoGrande : CreatorEnemy
     public override void EstadoMuerto()
     {
         base.EstadoMuerto();
+
         if (animaciones != null) animaciones.SetBool("vivo", false);
 
+        CambiarEstadoHuesos(false);
+
         agente.enabled = false;
+        agente.isStopped = true;
+        muerto = true;
+
+        Destroy(gameObject,10);
     }
     [ContextMenu("Matar")]//para poder cambiar a este estado en el editor de unity
+
 
     public void Matar()
     {
         CambiarEstado(Estados.muerto);
+        CambiarEstadoHuesos(false);
     }
     public void Atacar()
     {
         //Personaje.singleton.vida.CausarDaño(daño);
     }
 
-    /*private void SetAnimationBools(IEnumerable<(string paramName, bool state)> parameters) //tuplas, para cambiar los valores bool de varios strings
+    private void FinAtaque()
     {
-        if (animaciones == null) return;
-
-        foreach (var (paramName, state) in parameters)
-        {
-            animaciones.SetBool(paramName, state);
-        }
+        agente.isStopped = false;//me paro
+        animaciones.SetBool("atacando", false);
+        puedoDanhar = true;
     }
 
-    private void SetAnimationInts(IEnumerable<(string paramName, int value)> parameters)
+    private void DetectarImpacto()
     {
-        if (animaciones == null) return;
+        //1º referenciar el attackPoint
+        //2º crear una variable que represente el radio de ataque
+        //3 crear una variable que represente que es dañable,(layer)
 
-        foreach (var (paramName, value) in parameters)
+
+        Collider[] collDetectados = Physics.OverlapSphere(attackPoint.position, radioAtaque, queEsDanhable);
+
+        //si hemos detectado algo dentro de nuestro radar
+        if (collDetectados.Length > 0)
         {
-            animaciones.SetInteger(paramName, value);
+            //pasoo collider por collider aplicando daño
+            for (int i = 0; i < collDetectados.Length; i++)
+            {
+                collDetectados[i].GetComponent<FirstPerson>().RecibirDanho(danhoEnemigo);
+
+            }
+            puedoDanhar = false;
         }
-    }*/
+    }
+    private void AbrirVentanaAtaque()
+    {
+        ventanaAbierta = true;
+
+    }
+    private void CerrarVentanaAtaque()
+    {
+        ventanaAbierta = false;
+
+    }
 
 
 }

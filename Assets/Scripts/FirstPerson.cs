@@ -11,13 +11,13 @@ public class FirstPerson : MonoBehaviour
 
     [SerializeField] private float vidas;
 
-    [SerializeField] TMP_Text textoLlaves;
+    [SerializeField] TMP_Text textoLlaves, textoVida;
     public int llaves = 0;
-    public int llavesTotales;
+    public int llavesTotales= 3;
 
     public bool isSprinting;
 
-    public float sprintingSpeedMultiplier = 1.5f;
+    public float sprintingSpeedMultiplier = 2f;
 
     private float sprintSpeed = 1;
 
@@ -46,7 +46,7 @@ public class FirstPerson : MonoBehaviour
     private Vector3 movimientoVertical;
 
     public int Llaves { get => llaves; set => llaves = value; }
-    public int LlavesTotales { get => llavesTotales; set => llavesTotales = value; }
+    public float Vidas { get => vidas; set => vidas = value; }
 
     private void Awake()
     {
@@ -63,6 +63,7 @@ public class FirstPerson : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        llavesTotales = 3;
         staminaSlider = FindObjectOfType<StaminaBar>();
 
 
@@ -179,11 +180,20 @@ public class FirstPerson : MonoBehaviour
     public void RecibirDanho(float danhoEnemigo)
     {
         vidas -= danhoEnemigo;
+        textoVida.SetText("Life: " + vidas);
+        if(vidas<=0)
+        {
+            Destroy(gameObject);
+        }
+
     }
 
     public void ReiniciarJugador()
     {
         textoLlaves.SetText("Keys: " + llaves + "/" + llavesTotales);
+
+        textoVida.SetText("Life: " + vidas);
+        vidas = 100;
     }
 
     private void OnTriggerEnter(Collider other)

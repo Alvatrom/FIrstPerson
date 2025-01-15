@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject menuPausa, canvasMuerte;
 
 
-    private int vidas = 3;
+    private int vidas = 100;
 
     public int Vidas1 { get => vidas; }
 
@@ -95,6 +95,8 @@ public class GameManager : MonoBehaviour
         }
         else if (player == null && canvasMuerte != null && SceneManager.GetActiveScene().name != "Asylum")
         {
+            Time.timeScale = 0;
+            Cursor.lockState = CursorLockMode.None;
             canvasMuerte.SetActive(true);
         }
     }
@@ -124,10 +126,11 @@ public class GameManager : MonoBehaviour
         menuPausa.SetActive(false);
         canvasMuerte.SetActive(false);
         Time.timeScale = 1;
-        vidas = 3;
+        vidas = 100;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.None;
         BuscarPlayer();
+        player.ReiniciarJugador();
     }
 
     public void MenuPrincipal()
@@ -149,6 +152,8 @@ public class GameManager : MonoBehaviour
 
             if (player == null)
             {
+                Time.timeScale = 0;
+                Cursor.lockState = CursorLockMode.None;
                 canvasMuerte.SetActive(true);
                 Debug.LogWarning("No se encontró ningún objeto de tipo 'Player' en la escena.");
             }
@@ -156,6 +161,7 @@ public class GameManager : MonoBehaviour
         if (player != null)
         {
             canvasMuerte.SetActive(false);
+
         }
     }
 
