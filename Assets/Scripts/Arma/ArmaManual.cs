@@ -32,7 +32,7 @@ public class ArmaManual : MonoBehaviour
                         hitInfo.transform.GetComponent<ParteDeEnemigo>().RecibirDanho(misDatos.danhoAtaque);
                     }
                     //hitInfo.transform.GetComponent<Enemigo>().RecibirDanho(misDatos.danhoAtaque);
-                    if (hitInfo.transform.GetComponent<EnemigoGrande>())
+                    if (hitInfo.transform.GetComponent<ParteEnemigoGrande>())
                     {
                         hitInfo.transform.GetComponent<ParteEnemigoGrande>().RecibirDanho(misDatos.danhoAtaque);
                     }

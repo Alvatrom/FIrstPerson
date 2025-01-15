@@ -9,9 +9,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject menuPausa, canvasMuerte;
 
 
-    private int vidas = 100;
+    //private int vidas = 100;
 
-    public int Vidas1 { get => vidas; }
+    //public int Vidas1 { get => vidas; }
 
     public FirstPerson player;// lo hacemos publico para poder usarlo luego
 
@@ -71,9 +71,15 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (SceneManager.GetActiveScene().name == "Asylum")
+        /*if (SceneManager.GetActiveScene().name == "Asylum")
         {
             BuscarPlayer();
+        }*/
+        if(player.Vidas<= 0)
+        {
+            Time.timeScale = 0;
+            Cursor.lockState = CursorLockMode.None;
+            canvasMuerte.SetActive(true);
         }
         if (Input.GetKeyDown(KeyCode.P) && SceneManager.GetActiveScene().name == "Asylum")
         {
@@ -103,7 +109,7 @@ public class GameManager : MonoBehaviour
 
     public void PerderVida()
     {
-        vidas -= 1;
+        //vidas -= 1;
         AudioManager.instance.PlaySFX("Daño");
         //player.DesactivarVida(vidas);
     }
@@ -111,7 +117,7 @@ public class GameManager : MonoBehaviour
     public void RecuperarVida()
     {
         //player.ActivarVida(vidas);
-        vidas += 1;
+        //vidas += 1;
     }
 
     public void Reanudar()
@@ -123,14 +129,16 @@ public class GameManager : MonoBehaviour
 
     public void ReiniciarPartida()
     {
-        menuPausa.SetActive(false);
-        canvasMuerte.SetActive(false);
+        
+        //vidas = 100;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         Time.timeScale = 1;
-        vidas = 100;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        Cursor.lockState = CursorLockMode.None;
-        BuscarPlayer();
-        player.ReiniciarJugador();
+        //Cursor.lockState = CursorLockMode.Locked;
+        //menuPausa.SetActive(false);
+        //canvasMuerte.SetActive(false);
+
+        //BuscarPlayer();
+        //player.ReiniciarJugador();
     }
 
     public void MenuPrincipal()
@@ -148,15 +156,17 @@ public class GameManager : MonoBehaviour
         //para encontrar si o si al player
         if (player == null)
         {
-            player = FindObjectOfType<FirstPerson>();
-
-            if (player == null)
+            GameObject buscador = GameObject.Find("Player1");
+            //player = FindObjectOfType<FirstPerson>();
+            player = buscador.GetComponent<FirstPerson>();
+            Time.timeScale = 0;
+            Cursor.lockState = CursorLockMode.None;
+            canvasMuerte.SetActive(true);
+            Debug.LogWarning("No se encontró ningún objeto de tipo 'Player' en la escena.");
+            /*if (player == null)
             {
-                Time.timeScale = 0;
-                Cursor.lockState = CursorLockMode.None;
-                canvasMuerte.SetActive(true);
-                Debug.LogWarning("No se encontró ningún objeto de tipo 'Player' en la escena.");
-            }
+                
+            }*/
         }
         if (player != null)
         {

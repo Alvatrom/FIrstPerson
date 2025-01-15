@@ -361,7 +361,7 @@ public class EnemigoGrande : CreatorEnemy
     public void Matar()
     {
         CambiarEstado(Estados.muerto);
-        CambiarEstadoHuesos(false);
+        //CambiarEstadoHuesos(false);
     }
     public void Atacar()
     {
