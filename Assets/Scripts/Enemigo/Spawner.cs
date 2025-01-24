@@ -5,17 +5,32 @@ using UnityEngine;
 public class Spawner : MonoBehaviour
 {
     [SerializeField] private GameObject enemigoPrefab;
+
+    [Header("Niveles y Rondas")]
     [SerializeField] private Transform[] puntosSpawn;
     [SerializeField] private int numeroNiveles;
     [SerializeField] private int rondasPorNivel;
     [SerializeField] private int spawnsPorRonda;
+
+    [Header("Tiempos")]
     [SerializeField] private float esperaEntreSpawns;
     [SerializeField] private float esperaEntreRondas;
     [SerializeField] private float esperaEntreNiveles;
+
+    //[SerializeField] private Cartel mainscript;
     // Start is called before the first frame update
     void Start()
     {
+        
+    }
+    void OnEnable()
+    {
         StartCoroutine(Respawn());
+    }
+
+    void OnDisable()
+    {
+        StopAllCoroutines();
     }
 
 

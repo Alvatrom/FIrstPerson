@@ -9,6 +9,8 @@ public class Cartel : MonoBehaviour
     [SerializeField] Transform player;
     [SerializeField] string[] contenido;
     [SerializeField] Canvas teclaE;
+
+    [SerializeField] GameObject spawn;
     [SerializeField] float distanciaLectura;
     [SerializeField] bool leido = false;
 
@@ -52,6 +54,7 @@ public class Cartel : MonoBehaviour
             {
                 DialogueManager.instance.MostrarTexto(contenido);
                 leido= true;
+                spawn.SetActive(true);
             }
             else if (!teclaE.enabled)
             {

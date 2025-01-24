@@ -137,28 +137,18 @@ public class FirstPerson : MonoBehaviour
     }
     public void RunCheck()
     {
-        if(Input.GetKeyDown(KeyCode.LeftShift)) 
+        if (Input.GetKey(KeyCode.LeftShift) && staminaSlider.HasStamina())
         {
-            isSprinting = !isSprinting;
-
-            if (isSprinting)
-            {
-                staminaSlider.UseStamina(staminaUseAmount);
-            }
-            else
-            {
-                staminaSlider.UseStamina(0);
-            }
-        }
-        if (isSprinting)
-        {
+            isSprinting = true;
             sprintSpeed = sprintingSpeedMultiplier;
+            staminaSlider.UseStamina(staminaUseAmount * Time.deltaTime); // Se gasta de forma continua
         }
         else
         {
+            isSprinting = false;
             sprintSpeed = 1;
+            staminaSlider.RegenerateStamina(); // Se regenera cuando no se presiona Shift
         }
-
     }
 
     private void AplicarGravedad()
