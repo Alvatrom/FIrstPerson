@@ -47,12 +47,17 @@ public class AudioManager : MonoBehaviour
     private void FiltroEscena(Scene scene, LoadSceneMode mode)
     {
         //Reproducir la música correspondiente a la escena cargada
-        if (scene.name == "Titulo")
+        if (scene.name == "Start")
         {
+            musicSource.volume = 0.8f;
+            musicSource.pitch = 0.71f;
+            musicSource.spatialBlend = 0.5f;
             PlayMusic("MenuPrincipal");
         }
-        else if (scene.name == "Game")
+        else if (scene.name == "Asylum")
         {
+            ResetMusicSource();
+            musicSource.volume = 0.8f;
             PlayMusic("PlayMode");
         }
         else if (scene.name == "Final")
@@ -102,6 +107,25 @@ public class AudioManager : MonoBehaviour
     public void SFXVolume(float volume)
     {
         audioSourceSfx.volume = volume;
+    }
+
+    void ResetMusicSource()
+    {
+        musicSource.volume = 1.0f;
+        musicSource.pitch = 1.0f;
+        musicSource.loop = false;
+        musicSource.spatialBlend = 0.0f; // 2D sonido
+        musicSource.playOnAwake = false;
+        musicSource.mute = false;
+        musicSource.bypassEffects = false;
+        musicSource.bypassListenerEffects = false;
+        musicSource.bypassReverbZones = false;
+        musicSource.priority = 128;
+        musicSource.dopplerLevel = 1.0f;
+        musicSource.spread = 0;
+        musicSource.rolloffMode = AudioRolloffMode.Logarithmic;
+        musicSource.minDistance = 1.0f;
+        musicSource.maxDistance = 500.0f;
     }
 
 }
