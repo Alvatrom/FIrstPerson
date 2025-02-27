@@ -28,9 +28,13 @@ public class EnemigoGrande : CreatorEnemy
 
 
     public Transform[] CheckPoints;
-    private int indice, indiceSusto = 0;
+    private int indice;
+
+    //private int indiceSusto = 0; no lo llegamos a usar
     public float distanciaCheckPoints;
-    private bool isIdle,asustando = false,destruyendo = false;
+    private bool isIdle, asustando = false;
+
+    //private bool destruyendo = false;//no lo llegamos a usar
 
     private Coroutine aumentarSustoCoroutine;
     private EstadoVisto estadoVisto = EstadoVisto.NoVisto;
@@ -350,7 +354,6 @@ public class EnemigoGrande : CreatorEnemy
         CambiarEstadoHuesos(false);
 
         agente.enabled = false;
-        agente.isStopped = true;
         muerto = true;
 
         Destroy(gameObject,10);
